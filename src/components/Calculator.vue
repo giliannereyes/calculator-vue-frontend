@@ -74,27 +74,24 @@
                 this.error = ""
                 if (!this.expression) return
 
-                const {startIndex, segment} = this.getCurrentNumberSegmentWithIndex()
+                const { startIndex, segment } = this.getCurrentNumberSegmentWithIndex()
                 if (!segment) return
 
-                // segment has a leading minus -> remove it; else add it
-                let newSegment = segment 
-                if (segment.startsWith("-")) {
-                    newSegment = segment.slice(1)
-                } else {
-                    newSegment = "-" + segment 
-                }
+                const newSegment = segment.startsWith("-") ? segment.slice(1) : "-" + segment
 
-                this.expression = this.expression.slice(0, startIndex) + newSegment
+                this.expression =
+                    this.expression.slice(0, startIndex) +
+                    newSegment +
+                    this.expression.slice(startIndex + segment.length)
             },
 
-            evaluate() {
+            async evaluate() {
                 this.error = ""
                 if (!this.expression) return 
                 
                 const last = this.expression[this.expression.length - 1]
                 if (this.isOperator(last) || last == ".") {
-                    this.error = "Invalid equation. Ends with an operator or a decimal point."
+                    this.error = "Invalid expression. Ends with an operator or a decimal point."
                     return
                 }
 
@@ -104,23 +101,33 @@
                 }
 
                 try {
-                    const result = Function(`"use strict"; return (${this.expression})`)()
+                    // const result = Function(`"use strict"; return (${this.expression})`)()
+                    const response = await fetch("http://localhost:8080/api/calculator/calculate", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            expression: this.expression
+                        })
+                    })
 
-                    if (!Number.isFinite(result)) {
-                        this.error = "Invalid result."
-                        return 
+                    if (!response.ok) {
+                        throw new Error("Backend error!")
                     }
 
-                    this.lastResult = result 
+                    const data = await response.json()
+
+                    this.lastResult = data.result 
 
                     this.$emit("new-calculation", {
                         expression: this.expression, 
-                        result
+                        result: data.result
                     })
 
-                    this.expression = String(result)
+                    this.expression = String(data.result)
                 } catch (e) {
-                    this.error = "The equation could not be calculated."
+                    this.error = "The expression could not be calculated."
                 }
             },
 
@@ -133,17 +140,25 @@
             },
 
             getCurrentNumberSegmentWithIndex() {
-                let lastOpIndex = -1
-                for (let i = this.expression.length - 1; i >= 0; i--) {
-                    if (this.isOperator(this.expression[i])) {
-                        lastOpIndex = i
-                        break
+                const expr = this.expression
+                let i = expr.length - 1
+                while (i >= 0) {
+                    const ch = expr[i]
+                    if (this.isOperator(ch)) {
+                    if (ch === "-") {
+                        const prev = i > 0 ? expr[i - 1] : ""
+                        const isUnary = i === 0 || this.isOperator(prev)
+                        if (isUnary) {
+                            i--           
+                            continue
+                        }
                     }
+                        break 
+                    }
+                    i--
                 }
-
-                const startIndex = lastOpIndex + 1
-                const segment = this.expression.slice(startIndex)
-
+                const startIndex = i + 1
+                const segment = expr.slice(startIndex)
                 return { startIndex, segment }
             }
         }
@@ -195,7 +210,6 @@
         border: 1px solid rgba(255, 255, 255, 0.08);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35),0 1px 0 rgba(255, 255, 255, 0.04) inset;
     }
-
     .display {
         border: 1px solid #ddd; 
         background: #fff; 
@@ -210,13 +224,11 @@
         text-overflow: ellipsis;
         margin-bottom: 12px;
     }
-
     .grid {
         display: grid; 
         grid-template-columns: repeat(4, 1fr);
         gap: 10px; 
     }
-
     button {
         border-radius: 12px; 
         padding: 14px 10px; 
@@ -227,30 +239,24 @@
         color: #fbfbfb;
         transition: transform 0.05s ease, filter 0.15s ease;
     }
-
     button:active {
         transform: translateY(1px); 
     }
-
     .button_utility {
         background: #a5a4a4;
         font-weight: 700;
     }
-
     .button_operation {
         background: #ff9601;
         font-weight: 800;
     }
-
     .button_equals {
         background: #ff9601;
         font-weight: 900; 
     }
-
     button:hover {
         filter: brightness(0.97); 
     }
-
     .error {
         margin-top: 10px; 
         padding: 10px 12px; 
@@ -260,7 +266,6 @@
         color: #7a1f1c; 
         font-size: 14px; 
     }
-
     @media (max-width: 360px) {
         .calculator {
             padding: 12px; 
@@ -275,3 +280,4 @@
         }
     }
 </style>
+

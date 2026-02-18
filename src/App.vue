@@ -1,30 +1,5 @@
-<script setup lang="ts">
-  import { ref } from "vue"
-  import Calculator from "./components/Calculator.vue"
-  import Log from "./components/Log.vue"
-
-  type LogEntry = { expression: string; result: number }
-
-  const entries = ref<LogEntry[]>([])
-
-  function addToLog(entry: LogEntry) {
-    entries.value.unshift(entry)
-  }
-</script>
-
 <template>
-  <main class="page">
-    <header class="header">
-      <img src="./assets/calculator-icon.png" alt="Calculator image" class="logo" />
-      <h1>Calculator</h1>
-      <p>A simple calculator.</p>
-    </header>
-
-    <section class="content">
-       <Calculator @new-calculation="addToLog"/>
-       <Log :entries="entries" />
-    </section>
-  </main>
+  <RouterView />
 </template>
 
 <style scoped>
@@ -58,5 +33,4 @@
     align-items: center;
     gap: 16px;
   }
-
 </style>

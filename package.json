@@ -17,7 +17,8 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix --cache",
-    "format": "prettier --write --experimental-cli src/"
+    "format": "prettier --write --experimental-cli src/",
+    "mock:api": "json-server --watch db.json --port 3000"
   },
   "dependencies": {
     "pinia": "^3.0.4",
@@ -25,6 +26,7 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
+    "@pinia/testing": "^1.0.3",
     "@tsconfig/node24": "^24.0.3",
     "@types/jsdom": "^27.0.0",
     "@types/node": "^24.10.4",
@@ -41,6 +43,7 @@
     "eslint-plugin-vue": "~10.6.2",
     "jiti": "^2.6.1",
     "jsdom": "^27.4.0",
+    "json-server": "^1.0.0-beta.3",
     "npm-run-all2": "^8.0.4",
     "prettier": "3.7.4",
     "start-server-and-test": "^2.1.3",

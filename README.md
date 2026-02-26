@@ -1,70 +1,109 @@
-# vue-calculator
+# Vue Calculator
 
-This template should help get you started developing with Vue 3 in Vite.
+A web-based calculator application built with Vue 3. This frontend application connects to a backend API to perform calculations and store history.
 
-## Recommended IDE Setup
+## Backend
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+The backend for this project is available at: [calculator-vue-backend](https://github.com/giliannereyes/calculator-vue-backend)
 
-## Recommended Browser Setup
+## Tech Stack
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+- **Frontend Framework**: Vue 3
+- **Build Tool**: Vite
+- **TypeScript**: For type-safe development
+- **State Management**: Vue Pinia
+- **Routing**: Vue Router
+- **Testing**: Vitest (unit tests) and Cypress (end-to-end tests)
+- **CSS Framework**: Custom CSS with base styles
 
-## Type Support for `.vue` Imports in TS
+## How to Run
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Prerequisites
 
-## Customize configuration
+- Node.js (v18+ recommended)
+- npm or pnpm package manager
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Installation
 
-## Project Setup
+1. Clone the repository:
+```sh
+git clone <repository-url>
+cd vue-calculator
+```
 
+2. Install dependencies:
 ```sh
 npm install
+# or
+pnpm install
 ```
 
-### Compile and Hot-Reload for Development
+### Development Server
 
+Run the development server:
 ```sh
 npm run dev
+# or
+pnpm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+The application will be available at `http://localhost:5173` (or the port shown in the terminal).
 
+### Production Build
+
+Create an optimized production build:
 ```sh
 npm run build
+# or
+pnpm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Running Tests
 
+#### Unit Tests
 ```sh
 npm run test:unit
+# or
+pnpm run test:unit
 ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
+#### End-to-End Tests
 ```sh
 npm run test:e2e:dev
+# or
+pnpm run test:e2e:dev
 ```
 
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
+For production E2E tests:
 ```sh
 npm run build
 npm run test:e2e
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Linting
 
 ```sh
 npm run lint
+# or
+pnpm run lint
 ```
+
+## Features
+
+- Basic arithmetic calculations (add, subtract, multiply, divide)
+- Calculation history tracking
+- User authentication (sign in)
+- Contact form
+- Responsive calculator interface
+
+## Project Structure
+
+```
+src/
+├── components/       # Vue components
+├── stores/          # Pinia state management
+├── views/           # Page views
+├── router/          # Vue Router configuration
+├── services/        # API services
+├── assets/          # Static assets
+└── main.ts          # Application entry point
